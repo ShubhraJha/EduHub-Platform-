@@ -5,79 +5,189 @@
 
     <style>
         body {
+            font-family: Arial;
             margin: 0;
-            font-family: Arial, sans-serif;
         }
 
-        /* Top bar */
+        /* NAVBAR */
         .navbar {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            padding: 15px 30px;
-            background: #1e3a8a;
-            color: white;
+            padding: 12px 20px;
+            border-bottom: 1px solid #ccc;
+            background: #f8f8f8;
         }
 
-        .nav-right a {
-            color: white;
+        .navbar a {
             text-decoration: none;
-            margin-left: 20px;
-            font-weight: bold;
+            margin-left: 10px;
+            color: black;
         }
 
-        .nav-right a:hover {
-            text-decoration: underline;
+        .navbar a:hover {
+            color: blue;
         }
 
-        /* Hero section */
-        .hero {
+        /* LAYOUT */
+        .container {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 90vh;
-            background: #f4f4f4;
         }
 
-        .hero img {
-            width: 70%;
-            max-width: 800px;
-            border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        .left {
+            width: 250px;
+            border-right: 1px solid #ccc;
+            min-height: 100vh;
+            background: #fafafa;
         }
 
-        .title {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 28px;
-            font-weight: bold;
+        .left div {
+            padding: 12px;
+            cursor: pointer;
+        }
+
+        .left div:hover {
+            background: #eaeaea;
+        }
+
+        .right {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .course-box {
+            border: 1px solid #ccc;
+            padding: 12px;
+            margin: 10px;
+            border-radius: 5px;
+            display: inline-block;
+            width: 220px;
+            vertical-align: top;
+        }
+
+        .course-title {
+            cursor: pointer;
+        }
+
+        .batch {
+            margin-top: 10px;
+            margin-left: 10px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .enroll-btn {
+            display: inline-block;
+            margin-top: 5px;
+            font-size: 13px;
+            color: blue;
         }
     </style>
 </head>
 
 <body>
 
-    <!-- NAVBAR -->
-    <div class="navbar">
-        <div>
-            <h2>Edu Online Platform</h2>
-        </div>
+<!-- 🔐 NAVBAR -->
+<div class="navbar">
 
-        <div class="nav-right">
-            <a href="/login">🔑 Login</a>
-            <a href="/signup">📝 Signup</a>
-        </div>
+    <div>
+        <b>EduPlatform</b>
     </div>
 
-    <!-- HERO IMAGE -->
-    <div class="hero">
-        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f"
-             alt="Education Image">
+    <div>
+        {% if session.get("user_id") %}
+            
+            {% if session.get("role") == "student" %}
+                <a href="/student">Dashboard</a>
+            {% elif session.get("role") == "admin" %}
+                <a href="/admin">Admin</a>
+            {% elif session.get("role") == "teacher" %}
+                <a href="/teacher">Teacher</a>
+            {% endif %}
+
+            | <a href="/logout">Logout</a>
+
+        {% else %}
+            <a href="/login">Login</a> |
+            <a href="/signup">Signup</a>
+        {% endif %}
     </div>
 
-    <div class="title">
-        Learn Anytime, Anywhere 🚀
+</div>
+
+<h2 style="padding:20px;">All Courses</h2>
+
+<div class="container">
+
+    <!-- 📂 LEFT: CATEGORIES -->
+    <div class="left">
+        {% for cat_id, cat in data.items() %}
+            <div onclick="showCategory('{{ cat_id }}')">
+                {{ cat.name }}
+            </div>
+        {% endfor %}
     </div>
+
+    <!-- 📦 RIGHT: COURSES -->
+    <div class="right">
+        {% for cat_id, cat in data.items() %}
+            
+            <div id="cat-{{ cat_id }}" style="display:none">
+
+                <h3>{{ cat.name }}</h3>
+
+                {% for course_id, course in cat.courses.items() %}
+                    
+                    <div class="course-box">
+
+                        <!-- CLICKABLE COURSE -->
+                        <b class="course-title" onclick="toggleBatches('course-{{ course_id }}')">
+                            {{ course.name }}
+                        </b>
+
+                        <!-- HIDDEN BATCHES -->
+                        <div id="course-{{ course_id }}" class="batch">
+                            {% for b in course.batches %}
+                                <p>
+                                    {{ b.name }} <br>
+                                    <a class="enroll-btn" href="/enroll/{{ b.id }}">
+                                        Enroll
+                                    </a>
+                                </p>
+                            {% endfor %}
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endfor %}
+    </div>
+
+</div>
+
+<!-- ⚡ MINIMAL JS -->
+<script>
+function showCategory(id) {
+    document.querySelectorAll("[id^='cat-']").forEach(el => {
+        el.style.display = "none";
+    });
+
+    document.getElementById("cat-" + id).style.display = "block";
+}
+
+function toggleBatches(id) {
+
+    // hide all batch sections first (optional behavior)
+    document.querySelectorAll(".batch").forEach(el => {
+        el.style.display = "none";
+    });
+
+    // show clicked one
+    document.getElementById(id).style.display = "block";
+}
+</script>
 
 </body>
 </html>

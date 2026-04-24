@@ -1,5 +1,7 @@
 from flask import Flask,render_template
 from routes.auth_routes import login_routes
+from db_model.course_model import get_full_data
+from services.course_service import build_structure
 
 app = Flask(__name__)
 
@@ -8,11 +10,6 @@ app.secret_key = "secret_key_change_later"
 
 # 👉 register routes
 app.register_blueprint(login_routes) 
-
-
-# ======================
-# 👉 BASIC ROUTES (optional)
-# ======================
 
 
 @app.route("/admin")
@@ -31,7 +28,10 @@ def student():
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    rows = get_full_data()        # raw DB data
+    data = build_structure(rows)  # structured data
+
+    return render_template("index.html", data=data)
 
 # ======================
 # 👉 RUN SERVER
