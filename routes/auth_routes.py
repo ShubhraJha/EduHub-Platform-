@@ -8,7 +8,7 @@ def login_page():
 
 @login_routes.route("/login",methods=["POST"])
 def login():
-    email=request.form.get("email")
+    email=request.form.get("email") 
     password=request.form.get("password")
     user,msg=login_user(email,password)
     if not user:

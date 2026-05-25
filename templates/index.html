@@ -33,6 +33,7 @@
             display: flex;
         }
 
+        /* LEFT: CATEGORY */
         .left {
             width: 250px;
             border-right: 1px solid #ccc;
@@ -40,15 +41,23 @@
             background: #fafafa;
         }
 
-        .left div {
+        .left a {
+            display: block;
             padding: 12px;
-            cursor: pointer;
+            text-decoration: none;
+            color: black;
         }
 
-        .left div:hover {
+        .left a:hover {
             background: #eaeaea;
         }
 
+        .active {
+            background: #ddd;
+            font-weight: bold;
+        }
+
+        /* RIGHT: COURSES */
         .right {
             flex: 1;
             padding: 20px;
@@ -61,24 +70,15 @@
             border-radius: 5px;
             display: inline-block;
             width: 220px;
-            vertical-align: top;
         }
 
-        .course-title {
-            cursor: pointer;
+        .course-box a {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
         }
 
-        .batch {
-            margin-top: 10px;
-            margin-left: 10px;
-            font-size: 14px;
-            display: none;
-        }
-
-        .enroll-btn {
-            display: inline-block;
-            margin-top: 5px;
-            font-size: 13px;
+        .course-box a:hover {
             color: blue;
         }
     </style>
@@ -95,7 +95,6 @@
 
     <div>
         {% if session.get("user_id") %}
-            
             {% if session.get("role") == "student" %}
                 <a href="/student">Dashboard</a>
             {% elif session.get("role") == "admin" %}
@@ -114,80 +113,61 @@
 
 </div>
 
-<h2 style="padding:20px;">All Courses</h2>
+<h2 style="padding:20px;">All Categories</h2>
 
 <div class="container">
 
-    <!-- 📂 LEFT: CATEGORIES -->
+    <!-- 📂 LEFT: CATEGORY LIST -->
     <div class="left">
-        {% for cat_id, cat in data.items() %}
-            <div onclick="showCategory('{{ cat_id }}')">
-                {{ cat.name }}
-            </div>
-        {% endfor %}
+
+    <!-- BUTTON -->
+    <div onclick="toggleDropdown()" style="padding:12px; cursor:pointer; font-weight:bold;">
+        📚 All Courses ▼
     </div>
 
-    <!-- 📦 RIGHT: COURSES -->
-    <div class="right">
+    <!-- DROPDOWN (HIDDEN INITIALLY) -->
+    <div id="categoryList" style="display:none;">
         {% for cat_id, cat in data.items() %}
-            
-            <div id="cat-{{ cat_id }}" style="display:none">
-
-                <h3>{{ cat.name }}</h3>
-
-                {% for course_id, course in cat.courses.items() %}
-                    
-                    <div class="course-box">
-
-                        <!-- CLICKABLE COURSE -->
-                        <b class="course-title" onclick="toggleBatches('course-{{ course_id }}')">
-                            {{ course.name }}
-                        </b>
-
-                        <!-- HIDDEN BATCHES -->
-                        <div id="course-{{ course_id }}" class="batch">
-                            {% for b in course.batches %}
-                                <p>
-                                    {{ b.name }} <br>
-                                    <a class="enroll-btn" href="/enroll/{{ b.id }}">
-                                        Enroll
-                                    </a>
-                                </p>
-                            {% endfor %}
-                        </div>
-
-                    </div>
-
-                {% endfor %}
-
-            </div>
-
+            <a href="/category/{{ cat_id }}">
+                {{ cat.name }}
+            </a>
         {% endfor %}
     </div>
 
 </div>
 
-<!-- ⚡ MINIMAL JS -->
-<script>
-function showCategory(id) {
-    document.querySelectorAll("[id^='cat-']").forEach(el => {
-        el.style.display = "none";
-    });
+    <!-- 📦 RIGHT: COURSES -->
+    <div class="right">
 
-    document.getElementById("cat-" + id).style.display = "block";
-}
+        {% if selected_category %}
+            <h2>{{ selected_category.name }}</h2>
 
-function toggleBatches(id) {
+            {% for course_id, course in selected_category.courses.items() %}
+                <div class="course-box">
+                    <a href="/course/{{ course_id }}">
+                        {{ course.name }}
+                    </a>
+                </div>
+            {% endfor %}
 
-    // hide all batch sections first (optional behavior)
-    document.querySelectorAll(".batch").forEach(el => {
-        el.style.display = "none";
-    });
+        {% else %}
+            <h3>Select a category to view courses</h3>
+        {% endif %}
 
-    // show clicked one
-    document.getElementById(id).style.display = "block";
-}
-</script>
+    </div>
+
+</div>
 
 </body>
-</html>
+</html> 
+<script>
+function toggleDropdown() {
+    var el = document.getElementById("categoryList");
+
+    if (el.style.display === "none") {
+        el.style.display = "block";
+    } else {
+        el.style.display = "none";
+    }
+}
+</script>

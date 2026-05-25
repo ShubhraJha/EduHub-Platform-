@@ -11,7 +11,7 @@ def login_user(email,password):
 def register_user(email, password):
 
     if get_user_email(email):
-        return None, "User already exists"
+        return None,"User already exists"
 
     create_user(email, password, "student")
 

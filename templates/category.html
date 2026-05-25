@@ -1,0 +1,9 @@
+<h2>{{ category.name }}</h2>
+
+{% for course_id, course in category.courses.items() %}
+    <div>
+        <a href="/course/{{ course_id }}">
+            {{ course.name }}
+        </a>
+    </div>
+{% endfor %}
