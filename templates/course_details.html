@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>EduHub | {{ course.name }}</title>
+
+<link
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+rel="stylesheet">
+
+<style>
+
+/* ==============================
+   BASIC
+================================ */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:#f4f7ff;
+    color:#222;
+}
+
+
+/* ==============================
+   NAVBAR
+================================ */
+
+.navbar{
+    height:68px;
+
+    background:white;
+
+    border-bottom:1px solid #e5e7eb;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 45px;
+}
+
+.logo{
+    font-size:28px;
+
+    font-weight:700;
+
+    color:#1e40af;
+}
+
+.logo span{
+    color:#d97706;
+}
+
+.nav-links{
+    display:flex;
+
+    align-items:center;
+
+    gap:25px;
+}
+
+.nav-links a{
+    text-decoration:none;
+
+    color:#333;
+
+    font-size:14px;
+}
+
+.nav-links a:hover{
+    color:#1e40af;
+}
+
+.login-btn{
+    border:1px solid #1e40af;
+
+    padding:7px 18px;
+
+    border-radius:20px;
+
+    color:#1e40af !important;
+}
+
+.signup-btn{
+    background:#d97706;
+
+    color:white !important;
+
+    padding:8px 19px;
+
+    border-radius:20px;
+}
+
+
+/* ==============================
+   MAIN PAGE
+================================ */
+
+.page{
+    max-width:1180px;
+
+    margin:auto;
+
+    padding:22px 20px 45px;
+}
+
+
+/* ==============================
+   TOP IMAGE
+================================ */
+
+.top-banner{
+    width:94%;
+
+    height:145px;
+
+    margin:0 auto 22px;
+
+    border-radius:10px;
+
+    overflow:hidden;
+
+    background:white;
+
+    border:1px solid #e1e4ea;
+
+    box-shadow:0 2px 7px rgba(0,0,0,.06);
+}
+
+.top-banner img{
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+    display:block;
+}
+
+
+/* ==============================
+   COURSE INFORMATION
+================================ */
+
+.course-info{
+    padding:0 5px 22px;
+}
+
+.breadcrumb{
+    font-size:13px;
+
+    color:#777;
+
+    margin-bottom:12px;
+}
+
+.breadcrumb span{
+    color:#1e40af;
+}
+
+.course-info h1{
+    font-size:28px;
+
+    font-weight:700;
+
+    color:#222;
+
+    margin-bottom:8px;
+}
+
+.course-description{
+    max-width:1050px;
+
+    font-size:14px;
+
+    line-height:1.6;
+
+    color:#333;
+}
+
+
+/* ==============================
+   RESOURCE SECTION
+================================ */
+
+.resources{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:8px;
+
+    margin:5px 0 30px;
+
+    background:white;
+
+    padding:8px;
+
+    border:1px solid #e2e5eb;
+
+    border-radius:12px;
+}
+
+.resource{
+
+    min-height:78px;
+
+    padding:14px 16px;
+
+    display:flex;
+
+    align-items:center;
+
+    text-decoration:none;
+
+    color:#222;
+
+    border-radius:8px;
+
+    transition:.15s;
+}
+
+.resource:nth-child(1){
+    background:#e8efff;
+}
+
+.resource:nth-child(2){
+    background:#fff0ed;
+}
+
+.resource:nth-child(3){
+    background:#e7f8ed;
+}
+
+.resource:nth-child(4){
+    background:#e5f2ff;
+}
+
+.resource:hover{
+    filter:brightness(.98);
+}
+
+.resource-content h4{
+    font-size:15px;
+
+    font-weight:600;
+
+    margin-bottom:4px;
+
+    color:#222;
+}
+
+.resource-content p{
+    font-size:11px;
+
+    color:#555;
+
+    margin:0;
+}
+
+.resource-arrow{
+    margin-left:auto;
+
+    padding-left:10px;
+
+    font-size:21px;
+
+    color:#444;
+}
+
+
+/* ==============================
+   BATCH HEADING
+================================ */
+
+.section-heading{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    margin-bottom:14px;
+}
+
+.section-heading h2{
+
+    font-size:21px;
+
+    font-weight:600;
+
+    color:#1e3a8a;
+}
+
+.section-heading p{
+
+    font-size:12px;
+
+    color:#777;
+}
+
+
+/* ==============================
+   BATCH GRID
+================================ */
+
+.batch-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0,1fr));
+
+    /*
+       Small gap between cards
+    */
+
+    column-gap:10px;
+
+    row-gap:18px;
+
+    align-items:start;
+}
+
+
+/* ==============================
+   BATCH CARD
+================================ */
+
+.batch-card{
+
+    width:100%;
+
+    max-width:280px;
+
+    justify-self:center;
+
+    background:white;
+
+    border:1px solid #dfe3e8;
+
+    border-radius:10px;
+
+    overflow:hidden;
+
+    box-shadow:0 2px 7px rgba(0,0,0,.07);
+}
+
+
+/* ==============================
+   BATCH IMAGE
+================================ */
+
+.batch-image{
+
+    width:100%;
+
+    height:190px;
+
+    overflow:hidden;
+
+    background:#f1f3f5;
+}
+
+.batch-image img{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+    display:block;
+}
+
+
+/* ==============================
+   BATCH CONTENT
+================================ */
+
+.batch-content{
+
+    padding:13px;
+}
+
+.batch-content h3{
+
+    font-size:16px;
+
+    font-weight:600;
+
+    line-height:1.3;
+
+    margin-bottom:9px;
+
+    color:#222;
+}
+
+
+/* ==============================
+   BATCH DETAILS
+================================ */
+
+.batch-details{
+
+    font-size:12px;
+
+    color:#222;
+
+    line-height:1.8;
+
+    margin-bottom:9px;
+}
+
+.batch-details strong{
+
+    font-weight:600;
+
+    color:#222;
+}
+
+
+/* ==============================
+   PREMIUM
+================================ */
+
+.premium{
+
+    height:31px;
+
+    background:#202023;
+
+    color:white;
+
+    border-radius:5px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 9px;
+
+    font-size:9px;
+
+    font-weight:600;
+
+    margin:9px 0 10px;
+}
+
+.premium-tag{
+
+    background:#8a6a22;
+
+    padding:3px 7px;
+
+    border-radius:10px;
+
+    font-size:7px;
+
+    letter-spacing:.4px;
+}
+
+
+/* ==============================
+   PRICE
+================================ */
+
+.price-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding-bottom:9px;
+
+    border-bottom:1px solid #e5e7eb;
+}
+
+.price{
+
+    font-size:18px;
+
+    font-weight:700;
+
+    color:#1e40af;
+}
+
+.full-batch{
+
+    font-size:8px;
+
+    color:#777;
+
+    margin-top:2px;
+}
+
+
+/* ==============================
+   BUTTONS
+================================ */
+
+.buttons{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:6px;
+
+    margin-top:10px;
+}
+
+.btn-explore{
+
+    text-align:center;
+
+    text-decoration:none;
+
+    padding:8px 3px;
+
+    border:1px solid #4f46e5;
+
+    border-radius:6px;
+
+    color:#4f46e5;
+
+    background:white;
+
+    font-size:11px;
+
+    font-weight:600;
+}
+
+.btn-buy{
+
+    text-align:center;
+
+    text-decoration:none;
+
+    padding:8px 3px;
+
+    border-radius:6px;
+
+    background:#4f46e5;
+
+    color:white;
+
+    font-size:11px;
+
+    font-weight:600;
+}
+
+.btn-explore:hover{
+
+    background:#f5f6ff;
+
+    color:#4f46e5;
+}
+
+.btn-buy:hover{
+
+    background:#4338ca;
+
+    color:white;
+}
+
+
+/* ==============================
+   FOOTER
+================================ */
+
+.footer{
+
+    text-align:center;
+
+    color:#777;
+
+    font-size:12px;
+
+    padding-top:35px;
+}
+
+
+/* ==============================
+   TABLET
+================================ */
+
+@media(max-width:1000px){
+
+    .batch-grid{
+
+        grid-template-columns:
+            repeat(3,1fr);
+
+    }
+
+    .resources{
+
+        grid-template-columns:
+            repeat(2,1fr);
+
+    }
+
+}
+
+
+/* ==============================
+   MOBILE
+================================ */
+
+@media(max-width:650px){
+
+    .navbar{
+
+        height:auto;
+
+        padding:15px;
+
+        flex-direction:column;
+
+        gap:13px;
+    }
+
+    .nav-links{
+
+        flex-wrap:wrap;
+
+        justify-content:center;
+
+        gap:12px;
+    }
+
+    .page{
+
+        padding:15px 12px;
+    }
+
+    .top-banner{
+
+        width:100%;
+
+        height:100px;
+    }
+
+    .course-info h1{
+
+        font-size:23px;
+    }
+
+    .resources{
+
+        grid-template-columns:1fr;
+    }
+
+    .batch-grid{
+
+        grid-template-columns:
+            repeat(2,1fr);
+
+        gap:10px;
+    }
+
+    .batch-image{
+
+        height:150px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =================================
+     NAVBAR
+================================= -->
+
+<div class="navbar">
+
+    <div class="logo">
+        Edu<span>Hub</span>
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="/">
+            All Courses
+        </a>
+
+        <a href="#">
+            Free Material
+        </a>
+
+        <a href="#">
+            Offline Centers
+        </a>
+
+        <a href="#">
+            Store
+        </a>
+
+        <a href="/login" class="login-btn">
+            Login
+        </a>
+
+        <a href="/signup" class="signup-btn">
+            Signup
+        </a>
+
+    </div>
+
+</div>
+
+
+
+<!-- =================================
+     MAIN
+================================= -->
+
+<div class="page">
+
+
+    <!-- =================================
+         TOP COURSE IMAGE
+    ================================== -->
+
+    <div class="top-banner">
+
+        <!-- Replace this image later -->
+
+        <img
+            src="{{ url_for('static', filename='jee_banner.png') }}"
+            alt="Course Banner">
+
+    </div>
+
+
+
+    <!-- =================================
+         COURSE INFORMATION
+    ================================== -->
+
+    <div class="course-info">
+
+        <div class="breadcrumb">
+
+            Home
+            &nbsp;›&nbsp;
+
+            <span>
+                {{ course.name }}
+            </span>
+
+        </div>
+
+
+        <h1>
+
+            {{ course.name }}
+            Online Coaching and Complete Preparation
+
+        </h1>
+
+
+        <p class="course-description">
+
+            Prepare for {{ course.name }} with structured online learning,
+            expert guidance, regular practice and complete preparation
+            support for your examination.
+
+        </p>
+
+    </div>
+
+
+
+    <!-- =================================
+         RESOURCE LINKS
+    ================================== -->
+
+    <div class="resources">
+
+
+        <!-- BLOGS -->
+
+        <a
+            href="#"
+            class="resource">
+
+            <div class="resource-content">
+
+                <h4>
+                    Blogs
+                </h4>
+
+                <p>
+                    Read useful preparation articles
+                </p>
+
+            </div>
+
+            <span class="resource-arrow">
+                &gt;
+            </span>
+
+        </a>
+
+
+
+        <!-- PDF BANK -->
+
+        <a
+            href="/static/pdf_bank.jpg"
+            class="resource">
+
+            <div class="resource-content">
+
+                <h4>
+                    PDF Bank
+                </h4>
+
+                <p>
+                    Download useful study material
+                </p>
+
+            </div>
+
+            <span class="resource-arrow">
+                &gt;
+            </span>
+
+        </a>
+
+
+
+        <!-- TEST SERIES -->
+
+        <a
+            href="#"
+            class="resource">
+
+            <div class="resource-content">
+
+                <h4>
+                    Test Series
+                </h4>
+
+                <p>
+                    Practice with regular tests
+                </p>
+
+            </div>
+
+            <span class="resource-arrow">
+                &gt;
+            </span>
+
+        </a>
+
+
+
+        <!-- BOOKS -->
+
+        <a
+            href="/static/books.jpg"
+            class="resource">
+
+            <div class="resource-content">
+
+                <h4>
+                    Books
+                </h4>
+
+                <p>
+                    Find preparation books
+                </p>
+
+            </div>
+
+            <span class="resource-arrow">
+                &gt;
+            </span>
+
+        </a>
+
+
+    </div>
+
+
+
+    <!-- =================================
+         AVAILABLE BATCHES
+    ================================== -->
+
+    <div class="section-heading">
+
+        <h2>
+            Available Batches
+        </h2>
+
+        <p>
+            Choose a batch that suits your preparation
+        </p>
+
+    </div>
+
+
+
+    <!-- =================================
+         BATCH CARDS
+    ================================== -->
+
+    <div class="batch-grid">
+
+
+        {% for b in course.batches %}
+
+
+        <div class="batch-card">
+
+
+            <!-- BATCH IMAGE -->
+
+            <div class="batch-image">
+
+                <img
+                    src="{{ url_for('static', filename=b.image) }}"
+                    alt="{{ b.name }}">
+
+            </div>
+
+
+
+            <!-- BATCH INFORMATION -->
+
+            <div class="batch-content">
+
+
+                <h3>
+                    {{ b.name }}
+                </h3>
+
+
+                <div class="batch-details">
+
+                    <strong>
+                        For {{ course.name }} Aspirants
+                    </strong>
+
+                    <br>
+
+                    Starts on
+                    <strong>
+                        {{ b.start }}
+                    </strong>
+
+                    <br>
+
+                    Ends on
+                    <strong>
+                        {{ b.end }}
+                    </strong>
+
+                </div>
+
+
+
+                <!-- PREMIUM -->
+
+                <div class="premium">
+
+                    <span>
+                        Premium Features Included
+                    </span>
+
+                    <span class="premium-tag">
+                        INFINITY
+                    </span>
+
+                </div>
+
+
+
+                <!-- PRICE -->
+
+                <div class="price-row">
+
+                    <div>
+
+                        <div class="price">
+                            ₹{{ b.price }}
+                        </div>
+
+                        <div class="full-batch">
+                            FOR FULL BATCH
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- BUTTONS -->
+
+                <div class="buttons">
+
+                    <a
+                        href="#"
+                        class="btn-explore">
+
+                        Explore
+
+                    </a>
+
+
+                    <a
+                        href="/enroll/{{ course_id }}/{{ b.id }}"
+                        class="btn-buy">
+
+                        Buy Now
+
+                    </a>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+        {% endfor %}
+
+
+    </div>
+
+
+
+    <!-- FOOTER -->
+
+    <div class="footer">
+
+        EduHub Learning Platform
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>

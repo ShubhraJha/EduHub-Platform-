@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Videos</title>
+
+<style>
+
+body{
+
+background:#eef2ff;
+
+font-family:Arial;
+
+}
+
+.container{
+
+width:900px;
+
+margin:auto;
+
+}
+
+.video{
+
+background:white;
+
+padding:20px;
+
+margin:20px;
+
+border-radius:12px;
+
+box-shadow:0 5px 12px rgba(0,0,0,.1);
+
+}
+
+.btn{
+
+background:red;
+
+padding:10px 20px;
+
+color:white;
+
+text-decoration:none;
+
+border-radius:8px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1 align="center">
+
+Course Videos
+
+</h1>
+
+<div class="container">
+
+{% for video in videos %}
+
+<div class="video">
+
+<h2>
+
+{{ video.title }}
+
+</h2>
+
+<a
+href="{{ video.video_link }}"
+target="_blank"
+class="btn">
+
+▶ Watch Video
+
+</a>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+</body>
+
+</html>

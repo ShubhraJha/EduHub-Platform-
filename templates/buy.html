@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Payment - EduHub</title>
+    
+    <!-- Bootstrap CSS + Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <style>
+        body {
+            background: #f0f2f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .simple-nav {
+            background: white;
+            padding: 12px 30px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            color: #1e3a8a;
+            font-weight: 800;
+            font-size: 1.5rem;
+            text-decoration: none;
+        }
+        
+        .logo span {
+            color: #d97706;
+        }
+        
+        .nav-back {
+            color: #6b7280;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .nav-back:hover {
+            color: #1e3a8a;
+        }
+        
+        .payment-container {
+            max-width: 800px;
+            margin: 30px auto;
+        }
+        
+        .payment-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+        
+        .payment-header {
+            background: #f8fafc;
+            padding: 20px 30px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .payment-header h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0;
+        }
+        
+        .payment-header .subtitle {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .payment-body {
+            padding: 30px;
+        }
+        
+        .course-summary {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 18px 20px;
+            margin-bottom: 25px;
+            border-left: 4px solid #d97706;
+        }
+        
+        .course-summary h4 {
+            color: #1e293b;
+            font-weight: 700;
+            font-size: 18px;
+            margin: 0;
+        }
+        
+        .course-summary .course-label {
+            font-size: 13px;
+            color: #6b7280;
+        }
+        
+        .price-tag {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+        
+        .price-tag .currency {
+            font-size: 18px;
+            color: #4a4a4a;
+        }
+        
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+        
+        .method-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .method-card:hover {
+            border-color: #3b82f6;
+            background: #f8faff;
+        }
+        
+        .method-card.active {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+        
+        .method-card .icon {
+            font-size: 28px;
+            display: block;
+            margin-bottom: 4px;
+        }
+        
+        .method-card .method-name {
+            font-weight: 600;
+            font-size: 13px;
+            color: #1f2937;
+        }
+        
+        .method-card .method-sub {
+            font-size: 11px;
+            color: #6b7280;
+        }
+        
+        .payment-section {
+            display: none;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+        
+        .payment-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .qr-container {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .qr-box {
+            background: white;
+            padding: 16px;
+            border-radius: 10px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        
+        .qr-box img {
+            width: 160px;
+            height: 160px;
+            border-radius: 6px;
+        }
+        
+        .qr-box .upi-id {
+            margin-top: 8px;
+            font-weight: 600;
+            color: #1e3a8a;
+            background: #eff6ff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            display: inline-block;
+            font-size: 14px;
+        }
+        
+        .bank-details {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .bank-details .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 14px;
+        }
+        
+        .bank-details .detail-row:last-child {
+            border-bottom: none;
+        }
+        
+        .bank-details .label {
+            color: #6b7280;
+        }
+        
+        .bank-details .value {
+            font-weight: 500;
+            color: #1f2937;
+        }
+        
+        .copy-btn {
+            background: none;
+            border: none;
+            color: #3b82f6;
+            cursor: pointer;
+            font-size: 13px;
+            padding: 0 4px;
+        }
+        
+        .copy-btn:hover {
+            color: #1d4ed8;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-group label {
+            font-weight: 600;
+            color: #1f2937;
+            font-size: 14px;
+            margin-bottom: 6px;
+            display: block;
+        }
+        
+        .form-group input,
+        .form-group select {
+            border-radius: 8px;
+            border: 2px solid #e5e7eb;
+            padding: 10px 14px;
+            width: 100%;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            background: white;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #3b82f6;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.08);
+        }
+        
+        .form-group input:disabled,
+        .form-group input[readonly] {
+            background: #f0f0f0;
+            cursor: not-allowed;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .btn-submit {
+            background: #d97706;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 15px;
+            transition: all 0.2s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .btn-submit:hover {
+            background: #b45309;
+        }
+        
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .security-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 16px;
+            padding: 12px;
+            background: #f0fdf4;
+            border-radius: 8px;
+            color: #166534;
+            font-size: 13px;
+        }
+        
+        .toast-message {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #1e293b;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: none;
+            z-index: 1000;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .qr-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .payment-methods {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+            
+            .method-card {
+                padding: 12px 8px;
+            }
+            
+            .method-card .icon {
+                font-size: 22px;
+            }
+            
+            .method-card .method-name {
+                font-size: 11px;
+            }
+            
+            .payment-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
+            }
+            
+            .price-tag {
+                font-size: 20px;
+            }
+            
+            .qr-box img {
+                width: 140px;
+                height: 140px;
+            }
+            
+            .simple-nav {
+                padding: 10px 16px;
+            }
+            
+            .logo {
+                font-size: 1.2rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Simple Navbar -->
+<nav class="simple-nav">
+    <a href="/" class="logo">Edu<span>Hub</span></a>
+    <a href="javascript:history.back()" class="nav-back">
+        <i class="bi bi-arrow-left me-1"></i> Back
+    </a>
+</nav>
+
+<div class="container payment-container">
+    <div class="payment-card">
+        <!-- Simple Header -->
+        <div class="payment-header">
+            <div>
+                <h2><i class="bi bi-lock-fill me-2" style="color: #d97706;"></i>Payment</h2>
+            </div>
+            <div class="subtitle">
+                <i class="bi bi-shield-check me-1"></i> Secure checkout
+            </div>
+        </div>
+        
+        <!-- Body -->
+        <div class="payment-body">
+            <!-- Course Summary -->
+            <div class="course-summary">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4>{{ batch.name }}</h4>
+                        <span class="course-label">Course Enrollment</span>
+                    </div>
+                    <div class="price-tag">
+                        <span class="currency">₹</span>{{ batch.price }}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Payment Methods -->
+            <label class="fw-bold mb-2" style="color: #1f2937; font-size: 14px;">Pay with</label>
+            <div class="payment-methods">
+                <div class="method-card active" onclick="selectMethod('upi', this)">
+                    <span class="icon">📱</span>
+                    <div class="method-name">UPI / QR</div>
+                    <div class="method-sub">Scan & Pay</div>
+                </div>
+                <div class="method-card" onclick="selectMethod('card', this)">
+                    <span class="icon">💳</span>
+                    <div class="method-name">Card</div>
+                    <div class="method-sub">Credit/Debit</div>
+                </div>
+                <div class="method-card" onclick="selectMethod('netbanking', this)">
+                    <span class="icon">🏦</span>
+                    <div class="method-name">Net Banking</div>
+                    <div class="method-sub">All banks</div>
+                </div>
+            </div>
+            
+            <!-- ==================== UPI / QR SECTION ==================== -->
+            <div class="payment-section active" id="upiSection">
+                <div class="qr-container">
+                    <div class="qr-box">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=upi://pay?pa=eduhub@upi&pn=EduHub&am={{ batch.price }}&cu=INR" 
+                             alt="QR Code" id="qrImage">
+                        <div class="upi-id">
+                            <i class="bi bi-copy me-1" style="cursor: pointer;" onclick="copyUPI()"></i>
+                            eduhub@upi
+                        </div>
+                        <small class="text-muted" style="font-size: 12px;">Scan to pay instantly</small>
+                    </div>
+                    
+                    <div class="bank-details">
+                        <h6 class="fw-bold mb-2" style="color: #1f2937; font-size: 14px;">Bank Transfer Details</h6>
+                        <div class="detail-row">
+                            <span class="label">Bank</span>
+                            <span class="value">State Bank of India</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Account</span>
+                            <span class="value">EduPlatform Pvt Ltd</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Account No</span>
+                            <span class="value">
+                                1234567890
+                                <button class="copy-btn" onclick="copyText('1234567890')">
+                                    <i class="bi bi-copy"></i>
+                                </button>
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">IFSC</span>
+                            <span class="value">
+                                SBIN0001234
+                                <button class="copy-btn" onclick="copyText('SBIN0001234')">
+                                    <i class="bi bi-copy"></i>
+                                </button>
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">UPI ID</span>
+                            <span class="value">
+                                eduhub@upi
+                                <button class="copy-btn" onclick="copyText('eduhub@upi')">
+                                    <i class="bi bi-copy"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- UPI Transaction Form -->
+                <form method="POST" action="/confirm-enrollment" onsubmit="return validateForm('upi')" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+                    <input type="hidden" name="payment_method" value="upi">
+                    <input type="hidden" name="batch_id" value="{{ batch.id }}">
+                    <input type="hidden" name="course_id" value="{{ batch.course_id if batch.course_id else '' }}">
+                    
+                    <div class="form-group">
+                        <label for="upi_transaction_id">
+                            <i class="bi bi-receipt me-1"></i>UPI Transaction ID <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" 
+                               id="upi_transaction_id" 
+                               name="transaction_id" 
+                               placeholder="Enter UPI transaction ID from your app"
+                               required>
+                        <small class="text-muted" style="font-size: 12px;">Found in your GPay/PhonePe/Paytm transaction history</small>
+                    </div>
+                    
+                    <button type="submit" class="btn-submit">
+                        <i class="bi bi-check-circle me-2"></i>
+                        Confirm UPI Payment
+                    </button>
+                </form>
+            </div>
+            
+            <!-- ==================== CARD SECTION (SIMPLIFIED - WORKING) ==================== -->
+            <div class="payment-section" id="cardSection">
+                <form method="POST" action="/confirm-enrollment" onsubmit="return validateForm('card')">
+                    <input type="hidden" name="payment_method" value="card">
+                    <input type="hidden" name="batch_id" value="{{ batch.id }}">
+                    <input type="hidden" name="course_id" value="{{ batch.course_id if batch.course_id else '' }}">
+                    
+                    <div class="form-group">
+                        <label>Amount</label>
+                        <input type="text" value="₹{{ batch.price }}" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="card_type">Card Type <span class="text-danger">*</span></label>
+                        <select id="card_type" name="card_type" required>
+                            <option value="">Select card type</option>
+                            <option value="debit">Debit Card</option>
+                            <option value="credit">Credit Card</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="card_number">Card Number <span class="text-danger">*</span></label>
+                        <input type="text" 
+                               id="card_number" 
+                               name="card_number" 
+                               placeholder="Enter 16-digit card number"
+                               maxlength="16"
+                               autocomplete="cc-number"
+                               required>
+                        <small class="text-muted" style="font-size: 12px;">16-digit card number (no spaces)</small>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="expiry_date">Expiry Date <span class="text-danger">*</span></label>
+                            <input type="text" 
+                                   id="expiry_date" 
+                                   name="expiry_date" 
+                                   placeholder="MM/YY"
+                                   maxlength="5"
+                                   autocomplete="cc-exp"
+                                   required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cvv">CVV <span class="text-danger">*</span></label>
+                            <input type="password" 
+                                   id="cvv" 
+                                   name="cvv" 
+                                   placeholder="Enter CVV"
+                                   maxlength="4"
+                                   autocomplete="cc-csc"
+                                   required>
+                            <small class="text-muted" style="font-size: 12px;">3-4 digit code</small>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="card_name">Name on Card <span class="text-danger">*</span></label>
+                        <input type="text" 
+                               id="card_name" 
+                               name="card_name" 
+                               placeholder="As printed on card"
+                               autocomplete="cc-name"
+                               required>
+                    </div>
+                    
+                    <button type="submit" class="btn-submit">
+                        <i class="bi bi-lock-fill me-2"></i>
+                        Pay ₹{{ batch.price }} with Card
+                    </button>
+                </form>
+            </div>
+            
+            <!-- ==================== NET BANKING SECTION ==================== -->
+            <div class="payment-section" id="netbankingSection">
+                <div class="bank-details" style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <h6 class="fw-bold mb-3" style="color: #1f2937; font-size: 14px;">Transfer to this account</h6>
+                    <div class="detail-row">
+                        <span class="label">Bank Name</span>
+                        <span class="value">State Bank of India</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Account Name</span>
+                        <span class="value">EduPlatform Pvt Ltd</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Account Number</span>
+                        <span class="value">
+                            1234567890
+                            <button class="copy-btn" onclick="copyText('1234567890')">
+                                <i class="bi bi-copy"></i>
+                            </button>
+                        </span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">IFSC Code</span>
+                        <span class="value">
+                            SBIN0001234
+                            <button class="copy-btn" onclick="copyText('SBIN0001234')">
+                                <i class="bi bi-copy"></i>
+                            </button>
+                        </span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">UPI ID</span>
+                        <span class="value">
+                            eduhub@upi
+                            <button class="copy-btn" onclick="copyText('eduhub@upi')">
+                                <i class="bi bi-copy"></i>
+                            </button>
+                        </span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Amount</span>
+                        <span class="value" style="color: #d97706; font-weight: 700;">₹{{ batch.price }}</span>
+                    </div>
+                </div>
+                
+                <form method="POST" action="/confirm-enrollment" onsubmit="return validateForm('netbanking')">
+                    <input type="hidden" name="payment_method" value="netbanking">
+                    <input type="hidden" name="batch_id" value="{{ batch.id }}">
+                    <input type="hidden" name="course_id" value="{{ batch.course_id if batch.course_id else '' }}">
+                    
+                    <div class="form-group">
+                        <label for="bank_name">Your Bank <span class="text-danger">*</span></label>
+                        <select id="bank_name" name="bank_name" required>
+                            <option value="">Select your bank</option>
+                            <option value="sbi">State Bank of India (SBI)</option>
+                            <option value="hdfc">HDFC Bank</option>
+                            <option value="icici">ICICI Bank</option>
+                            <option value="axis">Axis Bank</option>
+                            <option value="kotak">Kotak Mahindra Bank</option>
+                            <option value="yes">Yes Bank</option>
+                            <option value="pnb">Punjab National Bank (PNB)</option>
+                            <option value="other">Other Bank</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="netbanking_ref">
+                            <i class="bi bi-receipt me-1"></i>Reference / Transaction ID <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" 
+                               id="netbanking_ref" 
+                               name="transaction_id" 
+                               placeholder="NEFT/RTGS/IMPS reference number"
+                               required>
+                        <small class="text-muted" style="font-size: 12px;">You'll get this after completing the transfer</small>
+                    </div>
+                    
+                    <button type="submit" class="btn-submit">
+                        <i class="bi bi-check-circle me-2"></i>
+                        Confirm Bank Transfer
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Security Badge -->
+            <div class="security-badge">
+                <i class="bi bi-shield-lock-fill"></i>
+                <span>Secure & encrypted payment</span>
+                <i class="bi bi-credit-card-2-front"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Message -->
+<div id="toast" class="toast-message">
+    <i class="bi bi-check-circle-fill me-2"></i>
+    <span id="toastText">Copied!</span>
+</div>
+
+<script>
+    // Select payment method
+    function selectMethod(method, element) {
+        document.querySelectorAll('.method-card').forEach(card => {
+            card.classList.remove('active');
+        });
+        element.classList.add('active');
+        
+        // Hide all sections
+        document.querySelectorAll('.payment-section').forEach(section => {
+            section.classList.remove('active');
+        });
+        
+        // Show selected section
+        if (method === 'upi') {
+            document.getElementById('upiSection').classList.add('active');
+        } else if (method === 'card') {
+            document.getElementById('cardSection').classList.add('active');
+        } else if (method === 'netbanking') {
+            document.getElementById('netbankingSection').classList.add('active');
+        }
+    }
+    
+    // Copy text - Simple version
+    function copyText(text) {
+        // Create temporary input
+        const input = document.createElement('input');
+        input.value = text;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        showToast('✅ Copied: ' + text);
+    }
+    
+    function copyUPI() {
+        copyText('eduhub@upi');
+    }
+    
+    // Toast
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        const toastText = document.getElementById('toastText');
+        toastText.textContent = message;
+        toast.style.display = 'block';
+        clearTimeout(toast._timeout);
+        toast._timeout = setTimeout(() => {
+            toast.style.display = 'none';
+        }, 2500);
+    }
+    
+    // ==================== SIMPLE VALIDATION (NO COMPLEX FORMATTING) ====================
+    function validateForm(method) {
+        if (method === 'upi') {
+            const input = document.getElementById('upi_transaction_id');
+            if (!input.value.trim()) {
+                alert('Please enter your UPI transaction ID');
+                input.focus();
+                return false;
+            }
+        } else if (method === 'card') {
+            const cardNumber = document.getElementById('card_number');
+            const expiry = document.getElementById('expiry_date');
+            const cvv = document.getElementById('cvv');
+            const cardName = document.getElementById('card_name');
+            const cardType = document.getElementById('card_type');
+            
+            if (!cardType.value) {
+                alert('Please select card type');
+                cardType.focus();
+                return false;
+            }
+            
+            if (cardNumber.value.replace(/\s/g, '').length < 16) {
+                alert('Please enter a valid 16-digit card number');
+                cardNumber.focus();
+                return false;
+            }
+            
+            if (expiry.value.length < 5) {
+                alert('Please enter a valid expiry date (MM/YY)');
+                expiry.focus();
+                return false;
+            }
+            
+            if (cvv.value.length < 3) {
+                alert('Please enter a valid CVV (3-4 digits)');
+                cvv.focus();
+                return false;
+            }
+            
+            if (!cardName.value.trim() || cardName.value.trim().length < 2) {
+                alert('Please enter the name on card');
+                cardName.focus();
+                return false;
+            }
+        } else if (method === 'netbanking') {
+            const bank = document.getElementById('bank_name');
+            const ref = document.getElementById('netbanking_ref');
+            
+            if (!bank.value) {
+                alert('Please select your bank');
+                bank.focus();
+                return false;
+            }
+            
+            if (!ref.value.trim()) {
+                alert('Please enter your transaction reference ID');
+                ref.focus();
+                return false;
+            }
+        }
+        
+        // Show loading state
+        const form = event.target;
+        const btn = form.querySelector('.btn-submit');
+        if (btn) {
+            btn.innerHTML = '<i class="bi bi-spinner bi-spin me-2"></i>Processing...';
+            btn.disabled = true;
+        }
+        
+        return true;
+    }
+</script>
+
+</body>
+</html>
